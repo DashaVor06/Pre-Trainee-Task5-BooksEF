@@ -15,15 +15,15 @@ namespace Interface.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<BookDTO>> Get()
+        public async Task<ActionResult<List<BookDTO>>> GetAsync()
         {
-            return Ok(_bookService.GetAllBooks());
+            return Ok(await _bookService.GetAllBooksAsync());
         }
 
         [HttpGet("id/{id}")]
-        public ActionResult<BookAndAuthorDTO> GetById(int id)
+        public async Task<ActionResult<BookAndAuthorDTO>> GetByIdAsync(int id)
         {
-            BookAndAuthorDTO? res = _bookService.GetByIdOrNull(id);
+            BookAndAuthorDTO? res = await _bookService.GetByIdOrNullAsync(id);
             if (res != null)
                 return Ok(res);
             else
@@ -31,15 +31,15 @@ namespace Interface.Controllers
         }
 
         [HttpGet("publishedAfter/{date}")]
-        public ActionResult<List<BookAndAuthorDTO>> GetPublishedAfter(int date)
+        public async Task<ActionResult<List<BookAndAuthorDTO>>> GetPublishedAfterAsync(int date)
         {
-            return Ok(_bookService.GetPublishedAfter(date));
+            return Ok(await _bookService.GetPublishedAfterAsync(date));
         }
 
         [HttpPost]
-        public ActionResult Post(BookDTO book)
+        public async Task<ActionResult> PostAsync(BookDTO book)
         {
-            BookDTO? res = _bookService.CreateOrNull(book);
+            BookDTO? res = await _bookService.CreateOrNullAsync(book);
             if (res != null)
                 return Ok(res);
             else
@@ -47,9 +47,9 @@ namespace Interface.Controllers
         }
 
         [HttpPut]
-        public ActionResult Put(BookDTO book)
+        public async Task<ActionResult> PutAsync(BookDTO book)
         {
-            BookDTO? res = _bookService.UpdateOrNull(book);
+            BookDTO? res = await _bookService.UpdateOrNullAsync(book);
             if (res != null)
                 return Ok(res);
             else
@@ -57,9 +57,9 @@ namespace Interface.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            if (_bookService.Delete(id))
+            if (await _bookService.DeleteAsync(id))
                 return Ok();
             else
                 return NotFound();

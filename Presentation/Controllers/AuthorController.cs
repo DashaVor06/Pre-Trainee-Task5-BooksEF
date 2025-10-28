@@ -15,15 +15,15 @@ namespace Interface.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<AuthorDTO>> Get()
+        public async Task<ActionResult<List<AuthorDTO>>> GetAsync()
         {
-            return Ok(_authorService.GetAll());
+            return Ok(await _authorService.GetAllAsync());
         }
 
         [HttpGet("id/{id}")]
-        public ActionResult<BookAndAuthorDTO> GetById(int id)
+        public async Task<ActionResult<BookAndAuthorDTO>> GetByIdAsync(int id)
         {
-            AuthorDTO? res = _authorService.GetByIdOrNull(id);
+            AuthorDTO? res = await _authorService.GetByIdOrNullAsync(id);
             if (res != null)
                 return Ok(res);
             else
@@ -31,9 +31,9 @@ namespace Interface.Controllers
         }
 
         [HttpGet("name/{name}")]
-        public ActionResult<BookAndAuthorDTO> GetByName(string name)
+        public async Task<ActionResult<BookAndAuthorDTO>> GetByNameAsync(string name)
         {
-            AuthorDTO? res = _authorService.GetByNameOrNull(name);
+            AuthorDTO? res = await _authorService.GetByNameOrNullAsync(name);
             if (res != null)
                 return Ok(res);
             else
@@ -41,9 +41,9 @@ namespace Interface.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(AuthorDTO author)
+        public async Task<ActionResult> PostAsync(AuthorDTO author)
         {
-            AuthorDTO? res = _authorService.CreateOrNull(author);
+            AuthorDTO? res = await _authorService.CreateOrNullAsync(author);
             if (res != null)
                 return Ok(author);
             else
@@ -51,9 +51,9 @@ namespace Interface.Controllers
         }
 
         [HttpPut]
-        public ActionResult Put(AuthorDTO author)
+        public async Task<ActionResult> PutAsync(AuthorDTO author)
         {
-            AuthorDTO? res = _authorService.UpdateOrNull(author);
+            AuthorDTO? res = await _authorService.UpdateOrNullAsync(author);
             if (res != null)
                 return Ok(author);
             else
@@ -61,9 +61,9 @@ namespace Interface.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            if (_authorService.Delete(id))
+            if (await _authorService.DeleteAsync(id))
                 return Ok();
             else
                 return NotFound();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataAccess.DatabaseContext;
 using DataAccess.Models;
+using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
 {
@@ -13,69 +14,69 @@ namespace DataAccess.Repositories
             _options = options;
         }
 
-        public List<Author> GetAll()
+        public async Task<List<Author>> GetAllAsync()
         {
             using (var context = new LibraryContext(_options))
             {
-                return context.Authors.ToList();
+                return await context.Authors.ToListAsync();
             }
         }
 
-        public Author GetById(int id)
+        public async Task<Author> GetByIdAsync(int id)
         {
             using (var context = new LibraryContext(_options))
             {
-                Author res = (from author in context.Authors
-                             where author.Id == id
-                             select author).FirstOrDefault();
-                return res;
-            }        
-        }
-
-        public Author GetByName(string name)
-        {
-            using (var context = new LibraryContext(_options))
-            {
-                Author res = (from author in context.Authors
-                              where author.Name.Contains(name)
-                              select author).FirstOrDefault();
+                Author res = await (from author in context.Authors
+                                    where author.Id == id
+                                    select author).FirstOrDefaultAsync();
                 return res;
             }
         }
 
-        public Author Create(Author author)
+        public async Task<Author> GetByNameAsync(string name)
         {
             using (var context = new LibraryContext(_options))
             {
-                context.Authors.Add(author);
-                context.SaveChanges();
+                Author res = await (from author in context.Authors
+                                    where author.Name.Contains(name)
+                                    select author).FirstOrDefaultAsync();
+                return res;
+            }
+        }
+
+        public async Task<Author> CreateAsync(Author author)
+        {
+            using (var context = new LibraryContext(_options))
+            {
+                await context.Authors.AddAsync(author);
+                await context.SaveChangesAsync();
                 return author;
             }
         }
-        public Author Update(Author author)
+        public async Task<Author> UpdateAsync(Author author)
         {
             using (var context = new LibraryContext(_options))
             {
-                Author res = (from authorTemp in context.Authors
-                              where authorTemp.Id == author.Id
-                              select authorTemp).FirstOrDefault();
+                Author res = await (from authorTemp in context.Authors
+                                    where authorTemp.Id == author.Id
+                                    select authorTemp).FirstOrDefaultAsync();
 
                 res.Name = author.Name;
                 res.DateOfBirth = author.DateOfBirth;
 
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return res;
             }
         }
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             using (var context = new LibraryContext(_options))
             {
-                Author res = (from author in context.Authors
-                              where author.Id == id
-                              select author).FirstOrDefault();
+                Author res = await (from author in context.Authors
+                                    where author.Id == id
+                                    select author).FirstOrDefaultAsync();
                 context.Authors.Remove(res);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }

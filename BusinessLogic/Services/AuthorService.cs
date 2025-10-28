@@ -17,54 +17,53 @@ namespace BusinessLogic.Services
             _reposBook = reposBook;
             _mapper = mapper;
         }
-        public List<AuthorDTO> GetAll()
+        public async Task<List<AuthorDTO>> GetAllAsync()
         {
-            return _mapper.Map<List<AuthorDTO>>(_reposAuthor.GetAll());
+            return _mapper.Map<List<AuthorDTO>>(await _reposAuthor.GetAllAsync());
         }       
-        public AuthorDTO? GetByIdOrNull (int id)
+        public async Task<AuthorDTO?> GetByIdOrNullAsync(int id)
         {
-            if (AuthorValidator.CheckIdExists(_reposAuthor.GetAll(), id))
+            if (AuthorValidator.CheckIdExists(await _reposAuthor.GetAllAsync(), id))
             {
-                return _mapper.Map<AuthorDTO>(_reposAuthor.GetById(id)); ;
+                return _mapper.Map<AuthorDTO>(await _reposAuthor.GetByIdAsync(id)); ;
             }
             return null;
         }
-        public AuthorDTO? GetByNameOrNull(string name)
+        public async Task<AuthorDTO?> GetByNameOrNullAsync(string name)
         {
-            if (AuthorValidator.CheckNameExists(_reposAuthor.GetAll(), name))
+            if (AuthorValidator.CheckNameExists(await _reposAuthor.GetAllAsync(), name))
             {
-                return _mapper.Map<AuthorDTO>(_reposAuthor.GetByName(name)); ;
+                return _mapper.Map<AuthorDTO>(await _reposAuthor.GetByNameAsync(name)); ;
             }
             return null;
         }
-        public AuthorDTO? CreateOrNull(AuthorDTO author)
+        public async Task<AuthorDTO?> CreateOrNullAsync(AuthorDTO author)
         {
-            if (AuthorValidator.CheckAuthorForCreate(_reposAuthor.GetAll(), _mapper.Map<Author>(author)))
+            if (AuthorValidator.CheckAuthorForCreate(await _reposAuthor.GetAllAsync(), _mapper.Map<Author>(author)))
             {
-                return _mapper.Map<AuthorDTO>(_reposAuthor.Create(_mapper.Map<Author>(author)));
+                return _mapper.Map<AuthorDTO>(await _reposAuthor.CreateAsync(_mapper.Map<Author>(author)));
             }
             return null;
         }
-        public AuthorDTO? UpdateOrNull (AuthorDTO author)
+        public async Task<AuthorDTO?> UpdateOrNullAsync(AuthorDTO author)
         {
-            if (AuthorValidator.CheckAuthorForUpdateDelete(_reposAuthor.GetAll(), _mapper.Map<Author>(author)))
+            if (AuthorValidator.CheckAuthorForUpdateDelete(await _reposAuthor.GetAllAsync(), _mapper.Map<Author>(author)))
             {
-                return _mapper.Map<AuthorDTO>(_reposAuthor.Update(_mapper.Map<Author>(author)));
+                return _mapper.Map<AuthorDTO>(await _reposAuthor.UpdateAsync(_mapper.Map<Author>(author)));
             }
             return null;
         }       
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            Author? author = _reposAuthor.GetById(id);
-            if (AuthorValidator.CheckAuthorForUpdateDelete(_reposAuthor.GetAll(), author))
-            {
-                _reposAuthor.Delete(id);
-                
-                foreach (Book book in _reposBook.GetAll().ToList())
+            Author? author = await _reposAuthor.GetByIdAsync(id);
+            if (AuthorValidator.CheckAuthorForUpdateDelete(await _reposAuthor.GetAllAsync(), author))
+            { 
+                var allBooks = await _reposBook.GetAllAsync();
+                foreach (Book book in allBooks)
                 {
                     if (book.AuthorId == id)
                     {
-                        _reposBook.Delete(book.Id);
+                        await _reposBook.DeleteAsync(book.Id);
                     }
                 }
 

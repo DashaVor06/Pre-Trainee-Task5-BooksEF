@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using BusinessLogic.DTO;
 using BusinessLogic.Validators;
 using DataAccess.Models;
@@ -28,14 +29,14 @@ namespace BusinessLogic.Services
             bookAndAuthor.DateOfBirth = author.DateOfBirth;
             return bookAndAuthor;      
         }
-        private List<BookAndAuthorDTO> GetListOfBooksAndAuthors(List<Book> listBooks)
+        private async Task<List<BookAndAuthorDTO>> GetListOfBooksAndAuthors(List<Book> listBooks)
         {
             var listBookAndAuthor = new List<BookAndAuthorDTO>();
             Author? author = null;
 
             foreach (Book book in listBooks)
             {
-                author = _reposAuthor.GetById(book.AuthorId);
+                author = await _reposAuthor.GetByIdAsync(book.AuthorId);
                 if (author != null)
                 {
                     listBookAndAuthor.Add(GetBookAndAuthorClass(book, author));
@@ -44,51 +45,51 @@ namespace BusinessLogic.Services
             }
             return listBookAndAuthor;
         }
-        public List<BookAndAuthorDTO> GetAllBooks()
+        public async Task<List<BookAndAuthorDTO>> GetAllBooksAsync()
         {
-            List<Book> listBooks = _reposBook.GetAll();
-            return GetListOfBooksAndAuthors(listBooks);
+            List<Book> listBooks = await _reposBook.GetAllAsync();
+            return await GetListOfBooksAndAuthors(listBooks);
         }
-        public BookAndAuthorDTO? GetByIdOrNull(int id)
+        public async Task<BookAndAuthorDTO?> GetByIdOrNullAsync(int id)
         {
-            if (BookValidator.CheckIdExists(_reposBook.GetAll(), id))
+            if (BookValidator.CheckIdExists(await _reposBook.GetAllAsync(), id))
             {
-                Book book = _reposBook.GetById(id);
-                if (AuthorValidator.CheckIdExists(_reposAuthor.GetAll(), book.AuthorId))
+                Book book = await _reposBook.GetByIdAsync(id);
+                if (AuthorValidator.CheckIdExists(await _reposAuthor.GetAllAsync(), book.AuthorId))
                 {
-                    Author author = _reposAuthor.GetById(book.AuthorId);
+                    Author author = await _reposAuthor.GetByIdAsync(book.AuthorId);
                     return GetBookAndAuthorClass(book, author);
                 }
             }
             return null;
         }
-        public List<BookAndAuthorDTO> GetPublishedAfter(int year)
+        public async Task<List<BookAndAuthorDTO>> GetPublishedAfterAsync(int year)
         {
-            List<Book> listBooks = _reposBook.GetPublishedAfter(year);
-            return GetListOfBooksAndAuthors(listBooks);
+            List<Book> listBooks = await _reposBook.GetPublishedAfterAsync(year);
+            return await GetListOfBooksAndAuthors(listBooks);
         }
-        public BookDTO? CreateOrNull(BookDTO book)
+        public async Task<BookDTO?> CreateOrNullAsync(BookDTO book)
         {
-            if (BookValidator.CheckBookForCreate(_reposBook.GetAll(), _reposAuthor.GetAll(), _mapper.Map<Book>(book)))
+            if (BookValidator.CheckBookForCreate(await _reposBook.GetAllAsync(), await _reposAuthor.GetAllAsync(), _mapper.Map<Book>(book)))
             {
-                return _mapper.Map<BookDTO>(_reposBook.Create(_mapper.Map<Book>(book)));
+                return _mapper.Map<BookDTO>(await _reposBook.CreateAsync(_mapper.Map<Book>(book)));
             }
             return null;    
         }
-        public BookDTO? UpdateOrNull(BookDTO book)
+        public async Task<BookDTO?> UpdateOrNullAsync(BookDTO book)
         {
-            if (BookValidator.CheckBookForUpdateDelete(_reposBook.GetAll(), _reposAuthor.GetAll(), _mapper.Map<Book>(book)))
+            if (BookValidator.CheckBookForUpdateDelete(await _reposBook.GetAllAsync(), await _reposAuthor.GetAllAsync(), _mapper.Map<Book>(book)))
             {
-                return _mapper.Map<BookDTO>(_reposBook.Update(_mapper.Map<Book>(book)));
+                return _mapper.Map<BookDTO>(await _reposBook.UpdateAsync(_mapper.Map<Book>(book)));
             }
             return null;
         }
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            Book? book = _reposBook.GetById(id);
-            if (BookValidator.CheckBookForUpdateDelete(_reposBook.GetAll(), _reposAuthor.GetAll(), book))
+            Book? book = await _reposBook.GetByIdAsync(id);
+            if (BookValidator.CheckBookForUpdateDelete(await _reposBook.GetAllAsync(), await _reposAuthor.GetAllAsync(), book))
             {
-                _reposBook.Delete(id);
+                await _reposBook.DeleteAsync(id);
                 return true;
             }
             return false;
