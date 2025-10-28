@@ -37,6 +37,23 @@ namespace BusinessLogic.Services
             }
             return null;
         }
+        public async Task<List<AuthorAndBooksAmountDTO>> GetBooksAmountAsync()
+        {
+            var listAuthors = await _reposAuthor.GetAllAsync();
+            var booksCountByAuthor = await _reposBook.GetBooksAmountAsync(); 
+
+            var result = (from author in listAuthors
+                          join bookCount in booksCountByAuthor on author.Id equals bookCount.Key
+                          select new AuthorAndBooksAmountDTO
+                          {
+                              Id = author.Id,
+                              Name = author.Name,
+                              DateOfBirth = author.DateOfBirth,
+                              BooksAmount = bookCount.Value
+                          }).ToList();
+
+            return result;
+        }
         public async Task<AuthorDTO?> CreateOrNullAsync(AuthorDTO author)
         {
             if (AuthorValidator.CheckAuthorForCreate(await _reposAuthor.GetAllAsync(), _mapper.Map<Author>(author)))

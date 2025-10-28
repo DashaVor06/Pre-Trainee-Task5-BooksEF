@@ -40,6 +40,12 @@ namespace Interface.Controllers
                 return NotFound();
         }
 
+        [HttpGet("booksAmount")]
+        public async Task<ActionResult<List<AuthorAndBooksAmountDTO>>> GetBooksAmountAsync()
+        {
+            return await _authorService.GetBooksAmountAsync();
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostAsync(AuthorDTO author)
         {

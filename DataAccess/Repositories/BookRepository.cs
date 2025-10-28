@@ -38,6 +38,17 @@ namespace DataAccess.Repositories
                 return res;
             }
         }
+        public async Task<Dictionary<int, int>> GetBooksAmountAsync()
+        {
+            using (var context = new LibraryContext(_options))
+            {
+                var result = await (from book in context.Books
+                                    group book by book.AuthorId into g
+                                    select new { AuthorId = g.Key, Count = g.Count() })
+                                   .ToDictionaryAsync(x => x.AuthorId, x => x.Count);
+                return result;
+            }
+        }
         public async Task<Book> CreateAsync(Book book)
         {
             using (var context = new LibraryContext(_options))

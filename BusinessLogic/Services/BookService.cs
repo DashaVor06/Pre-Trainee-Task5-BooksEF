@@ -32,11 +32,14 @@ namespace BusinessLogic.Services
         private async Task<List<BookAndAuthorDTO>> GetListOfBooksAndAuthors(List<Book> listBooks)
         {
             var listBookAndAuthor = new List<BookAndAuthorDTO>();
-            Author? author = null;
+            var listAuthors = await _reposAuthor.GetAllAsync();
 
             foreach (Book book in listBooks)
             {
-                author = await _reposAuthor.GetByIdAsync(book.AuthorId);
+                Author? author = (from authorTemp in listAuthors
+                                  where authorTemp.Id == book.AuthorId
+                                  select authorTemp).FirstOrDefault();
+
                 if (author != null)
                 {
                     listBookAndAuthor.Add(GetBookAndAuthorClass(book, author));
