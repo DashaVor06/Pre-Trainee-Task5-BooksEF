@@ -36,7 +36,7 @@ namespace BusinessLogic.Validators
         }
         public static bool CheckBookForCreate(List<Book> listBooks, List<Author> listAuthors,Book? book)
         {
-            return (book != null && CheckTitle(book.Title) && CheckPublishedYear(book.PublishedYear) && CheckId(listBooks, book.Id) && CheckAuthorId(listAuthors, book.AuthorId));
+            return (book != null && CheckTitle(book.Title) && CheckPublishedYear(book.PublishedYear) && CheckAuthorId(listAuthors, book.AuthorId));
         }
         public static bool CheckBookForUpdateDelete(List<Book> listBooks, List<Author> listAuthors, Book? book)
         {

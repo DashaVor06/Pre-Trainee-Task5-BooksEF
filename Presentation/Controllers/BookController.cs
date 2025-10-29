@@ -30,10 +30,10 @@ namespace Interface.Controllers
                 return NotFound();
         }
 
-        [HttpGet("publishedAfter/{date}")]
-        public async Task<ActionResult<List<BookAndAuthorDTO>>> GetPublishedAfterAsync(int date)
+        [HttpGet("publishedAfter/{year}")]
+        public async Task<ActionResult<List<BookAndAuthorDTO>>> GetPublishedAfterAsync(int year)
         {
-            return Ok(await _bookService.GetPublishedAfterAsync(date));
+            return Ok(await _bookService.GetPublishedAfterAsync(year));
         }
 
         [HttpPost]
