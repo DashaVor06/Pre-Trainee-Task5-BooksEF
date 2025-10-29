@@ -40,16 +40,17 @@ namespace BusinessLogic.Services
         public async Task<List<AuthorAndBooksAmountDTO>> GetBooksAmountAsync()
         {
             var listAuthors = await _reposAuthor.GetAllAsync();
-            var booksCountByAuthor = await _reposBook.GetBooksAmountAsync(); 
+            var booksCountByAuthor = await _reposBook.GetBooksAmountAsync();
 
             var result = (from author in listAuthors
-                          join bookCount in booksCountByAuthor on author.Id equals bookCount.Key
+                          join bookCount in booksCountByAuthor on author.Id equals bookCount.Key into authorBooks
+                          from bookCount in authorBooks.DefaultIfEmpty()
                           select new AuthorAndBooksAmountDTO
                           {
                               Id = author.Id,
                               Name = author.Name,
                               DateOfBirth = author.DateOfBirth,
-                              BooksAmount = bookCount.Value
+                              BooksAmount = bookCount.Value // Будет 0 если книг нет
                           }).ToList();
 
             return result;

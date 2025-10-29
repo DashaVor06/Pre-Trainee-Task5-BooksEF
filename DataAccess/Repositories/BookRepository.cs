@@ -53,6 +53,7 @@ namespace DataAccess.Repositories
         {
             using (var context = new LibraryContext(_options))
             {
+                book.Id = 0;
                 await context.Books.AddAsync(book);
                 await context.SaveChangesAsync();
                 return book;

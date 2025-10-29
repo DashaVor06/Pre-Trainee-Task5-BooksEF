@@ -48,6 +48,7 @@ namespace DataAccess.Repositories
         {
             using (var context = new LibraryContext(_options))
             {
+                author.Id = 0;
                 await context.Authors.AddAsync(author);
                 await context.SaveChangesAsync();
                 return author;

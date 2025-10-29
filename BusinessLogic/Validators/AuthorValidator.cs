@@ -21,10 +21,6 @@ namespace BusinessLogic.Validators
         {
             return (date < DateTime.Now && date > new DateTime(1500, 1, 1));
         }
-        public static bool CheckId(List<Author> list, int id)
-        {
-            return (id > list.Last().Id);
-        }
         public static bool CheckIdExists(List<Author> list, int id)
         {
             foreach (Author author in list)
@@ -36,7 +32,7 @@ namespace BusinessLogic.Validators
         }
         public static bool CheckAuthorForCreate( List<Author> listAuthors, Author? author)
         {
-            return (author != null && CheckName(author.Name) && !CheckNameExists(listAuthors, author.Name) && CheckId(listAuthors, author.Id));
+            return (author != null && CheckName(author.Name) && !CheckNameExists(listAuthors, author.Name));
         }
         public static bool CheckAuthorForUpdateDelete(List<Author> listAuthors, Author? author)
         {
