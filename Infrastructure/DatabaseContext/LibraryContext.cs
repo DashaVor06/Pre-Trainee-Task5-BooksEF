@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 
-namespace DataAccess.DatabaseContext
+namespace Infrastructure.DatabaseContext
 {
     public class LibraryContext(DbContextOptions<LibraryContext> options) : DbContext(options)
     {

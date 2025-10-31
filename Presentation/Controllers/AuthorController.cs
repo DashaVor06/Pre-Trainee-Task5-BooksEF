@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using BusinessLogic.Services;
 using BusinessLogic.DTO;
+using BusinessLogic.Services.AuthorService;
 
 namespace Interface.Controllers
 {

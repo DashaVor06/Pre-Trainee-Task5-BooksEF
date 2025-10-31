@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using DataAccess.DatabaseContext;
+using Infrastructure.DatabaseContext;
 using DataAccess.Models;
-using System.Threading.Tasks;
+using DataAccess.Repositories;
 
-namespace DataAccess.Repositories
+namespace Infrastructure.Repositories
 {
     public class AuthorRepository : IRepository<Author>
     {

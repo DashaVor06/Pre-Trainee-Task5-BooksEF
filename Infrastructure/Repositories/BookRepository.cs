@@ -1,8 +1,9 @@
-﻿using DataAccess.DatabaseContext;
+﻿using Infrastructure.DatabaseContext;
 using DataAccess.Models;
+using DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess.Repositories
+namespace Infrastructure.Repositories
 {
     public class BookRepository : IRepository<Book>
     {

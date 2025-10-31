@@ -1,10 +1,10 @@
-﻿using DataAccess.DatabaseContext;
+﻿using Infrastructure.DatabaseContext;
 using Presentation.Profiles;
-using BusinessLogic.Services;
-using DataAccess.Models;
-using DataAccess.Repositories;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using BusinessLogic.Services.AuthorService;
+using BusinessLogic.Services.BookService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +14,7 @@ builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddDbContext<LibraryContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        b => b.MigrationsAssembly("Presentation")
+        b => b.MigrationsAssembly("Infrastructure")
     ));
 
 builder.Services.AddScoped<AuthorRepository>(provider =>

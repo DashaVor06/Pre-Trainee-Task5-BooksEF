@@ -2,11 +2,11 @@
 using BusinessLogic.DTO;
 using BusinessLogic.Validators;
 using DataAccess.Models;
-using DataAccess.Repositories;
+using Infrastructure.Repositories;
 
-namespace BusinessLogic.Services
+namespace BusinessLogic.Services.AuthorService
 {
-    public class AuthorService
+    public class AuthorService : IAuthorService
     {
         private AuthorRepository _reposAuthor;
         private BookRepository _reposBook;
@@ -50,7 +50,7 @@ namespace BusinessLogic.Services
                               Id = author.Id,
                               Name = author.Name,
                               DateOfBirth = author.DateOfBirth,
-                              BooksAmount = bookCount.Value // Будет 0 если книг нет
+                              BooksAmount = bookCount.Value
                           }).ToList();
 
             return result;

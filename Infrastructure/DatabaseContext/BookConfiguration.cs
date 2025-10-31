@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DataAccess.DatabaseContext
+namespace Infrastructure.DatabaseContext
 {
     public class BookConfiguration : IEntityTypeConfiguration<Book>
     {

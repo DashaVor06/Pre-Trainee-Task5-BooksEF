@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
 using BusinessLogic.DTO;
 using BusinessLogic.Validators;
 using DataAccess.Models;
-using DataAccess.Repositories;
+using Infrastructure.Repositories;
 
-namespace BusinessLogic.Services
+namespace BusinessLogic.Services.BookService
 {
-    public class BookService
+    public class BookService : IBookService
     {
         private BookRepository _reposBook;
         private AuthorRepository _reposAuthor;
